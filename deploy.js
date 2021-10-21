@@ -2,6 +2,7 @@ const HDWalletProvider = require("truffle-hdwallet-provider");
 const Web3 = require("web3");
 const { interface, bytecode } = require("./compile");
 
+// Don't upload the secret phrase to source control (The secret phrase below is just for testing purpose)
 const provider = new HDWalletProvider(
   "juice bicycle seek common shield hello below angry source share exact mobile",
   // remember to change this to your own phrase!
@@ -17,8 +18,10 @@ const deploy = async () => {
 
   const result = await new web3.eth.Contract(JSON.parse(interface))
     .deploy({ data: bytecode })
-    .send({ gas: "1000000", from: accounts[0] });
+    // .send({ gas: "1000000", from: accounts[0] }); // underpriced
+    .send({ gas: '1000000', gasPrice: '5000000000', from: accounts[0] });
 
+  console.log(interface);
   console.log("Contract deployed to", result.options.address);
 };
 deploy();
